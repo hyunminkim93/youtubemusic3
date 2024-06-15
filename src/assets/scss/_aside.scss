@@ -15,7 +15,7 @@
         h2 {
             text-align: center;
             font-size: 1.25rem;
-            font-family: var(--fontJ);
+            font-family: var(--fontB);
             font-weight: 300;
             margin-bottom: 10px;
             color: var(--black300);
@@ -56,6 +56,7 @@
                 font-weight: 900;
                 display: block;
                 text-align: center;
+                font-family: var(--fontE);
             }
 
             .artist {
@@ -64,6 +65,7 @@
                 font-weight: 900;
                 display: block;
                 margin-top: 5px;
+                font-size: 20px;
             }
         }
 
@@ -124,7 +126,7 @@
                 }
 
                 &.bg {
-                    background: linear-gradient(90deg, #5779FF 0%, #7E56FF 100%);
+                    background: linear-gradient(90deg, #e657ffd6 0%, #ff56c5b3 100%);
 
                     svg {
                         color: var(--white);
@@ -139,14 +141,51 @@
 
         .volume {
             text-align: center;
-            display: none;
+            width: 100%;
+            margin-bottom: 20px;
+            color: #DDA0DD;
+        }
+        .volume input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(to right, #d847d85e, #DDA0DD);
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: background 0.3s ease;
+            margin-top: 26px;
+        }
 
-            input {
-                background: linear-gradient(90deg, #5779FF 0%, #7E56FF 100%);
-                height: 3px;
-                border-radius: 5px;
-                accent-color: #5779FF;
-            }
+        .volume input[type="range"]:hover {
+            background: linear-gradient(to right, #d34dd3);
+        }
+
+        .volume input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #c627db95;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .volume input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 10px;
+            background: #DDA0DD;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .volume input[type="range"]:focus {
+            outline: none;
+        }
+
+        .volume .label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            text-align: center;
         }
     }
 
@@ -154,20 +193,21 @@
         padding: 2rem;
         height: calc(100vh - 490px);
         overflow-y: scroll;
-
+    
         h3 {
             text-align: center;
             font-size: 1.25rem;
-            font-family: var(--fontJ);
+            font-family: var(--fontB);
             font-weight: 300;
             margin-bottom: 10px;
             color: var(--black300);
-
+            margin-top: 22px;
+    
             svg {
                 color: var(--pointColor);
             }
         }
-
+    
         ul {
             li {
                 display: flex;
@@ -178,7 +218,8 @@
                 border-radius: 100px;
                 padding-right: 10px;
                 cursor: pointer;
-
+                position: relative; // position을 relative로 설정하여 삭제 버튼의 위치를 절대값으로 지정할 수 있도록 함
+    
                 .img {
                     width: 70px;
                     height: 70px;
@@ -189,29 +230,40 @@
                     background-repeat: no-repeat;
                     background-color: var(--white200);
                 }
-
+    
                 .title {
                     width: calc(100% - 80px);
                     max-height: 45px;
-                    font-family: var(--fontJ);
-                    font-weight: 300;
+                    font-family: var(--fontE);
+                    font-weight: 900;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     display: -webkit-box;
                     -webkit-line-clamp: 2;
                     -webkit-box-orient: vertical;
                 }
-
+    
+                .delete {
+                    position: absolute;
+                    right: 10px;
+                    cursor: pointer;
+                    color: var(--red); // 원하는 색상으로 설정
+                    background: none;
+                    border: none;
+                    font-size: 1.2rem;
+                    margin-top: 42px;
+                }
+    
                 &:hover {
                     background-color: var(--pointBg);
                 }
-
+    
                 &.current-track {
                     background-color: var(--pointBg);
-
+    
                     .img {
                         position: relative;
-
+    
                         &::before {
                             content: '';
                             width: 100%;
@@ -222,7 +274,7 @@
                             top: 0;
                             border-radius: 50px;
                         }
-
+    
                         &::after {
                             content: '';
                             width: 20px;
@@ -241,4 +293,5 @@
             }
         }
     }
+    
 }

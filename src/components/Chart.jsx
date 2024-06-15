@@ -2,12 +2,12 @@ import React, { forwardRef, useContext, useState } from 'react'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
+import {  ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from './Modal';
 
 import { FcCalendar } from 'react-icons/fc';
-import { MdFormatListBulletedAdd, MdOutlinePlayCircleFilled, MdClose, MdHive } from 'react-icons/md';
+import {  MdOutlinePlayCircleFilled, MdClose, MdHive } from 'react-icons/md';
 import { MusicPlayerContext } from '../context/MusicPlayerProvider';
 
 const CustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -18,7 +18,7 @@ const CustomInput = forwardRef(({ value, onClick }, ref) => (
 ));
 
 const Chart = ({ title, showCalendar, selectedDate, onDateChange, minDate, maxDate, data }) => {
-    const { addTrackToList, addTrackToEnd, playTrack } = useContext(MusicPlayerContext);
+    const { addTrackToList, playTrack } = useContext(MusicPlayerContext);
 
     const [youtubeResults, setYoutubeResults] = useState([]);
     const [selectedTitle, setSelectedTitle] = useState(null);
@@ -59,17 +59,6 @@ const Chart = ({ title, showCalendar, selectedDate, onDateChange, minDate, maxDa
         playTrack(0);
     };
 
-    const handleAddToList = (result) => {
-        const newTrack = {
-            title: result.snippet.title,
-            videoID: result.id.videoId,
-            imageURL: result.snippet.thumbnails.default.url,
-            artist: result.snippet.channelTitle,
-            rank: 1
-        };
-        addTrackToEnd(newTrack);
-        toast.success('리스트에 추가했습니다.');
-    };
 
     const handleAddToPlaylistClick = (result) => {
         setSelectedTrack({
@@ -122,7 +111,7 @@ const Chart = ({ title, showCalendar, selectedDate, onDateChange, minDate, maxDa
             </section>
             {youtubeResults.length > 0 && (
                 <section className='youtube-result'>
-                    <h3>🧑🏻‍💻 👉 "{selectedTitle}"에 대한 유튜브 검색 결과입니다.</h3>
+                    <h3>"{selectedTitle}"에 대한 유튜브 검색 결과입니다.</h3>
                     <ul>
                         {youtubeResults.map((result, index) => (
                             <li key={index}>
@@ -130,9 +119,6 @@ const Chart = ({ title, showCalendar, selectedDate, onDateChange, minDate, maxDa
                                 <span className='title'>{result.snippet.title}</span>
                                 <span className='playNow' onClick={() => handlePlayNow(result)}>
                                     <MdOutlinePlayCircleFilled /><span className='ir'>노래듣기</span>
-                                </span>
-                                <span className='listAdd' onClick={() => handleAddToList(result)}>
-                                    <MdFormatListBulletedAdd /><span className='ir'>리스트 추가하기</span>
                                 </span>
                                 <span className='chartAdd' onClick={() => handleAddToPlaylistClick(result)}>
                                     <MdHive /><span className='ir'>나의 리스트에 추가하기</span>

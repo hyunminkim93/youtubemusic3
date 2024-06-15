@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { FcRating, FcPlus, FcApproval } from "react-icons/fc";
-import { IoMusicalNotes } from "react-icons/io5";
+import { IoMusicalNotes, IoTrash } from "react-icons/io5"; // import IoTrash correctly
 
 const Header = () => {
     const [showInput, setShowInput] = useState(false); // 입력 박스 표시 여부 상태
@@ -44,29 +44,39 @@ const Header = () => {
         }
     };
 
+    const handleDeletePlaylist = (key) => {
+        localStorage.removeItem(key); // 로컬 스토리지에서 해당 플레이리스트 삭제
+        const updatedCount = playlistCount - 1;
+        localStorage.setItem('playlistCount', updatedCount.toString());
+        setPlaylistCount(updatedCount); // 상태 업데이트
+    };
+
     const playlistLinks = []; // 플레이리스트 링크를 저장할 배열
     for (let i = 1; i <= playlistCount; i++) {
         const playlistKey = `playlist${i}`; // 각 플레이리스트 키 생성
         const playlist = JSON.parse(localStorage.getItem(playlistKey)); // 로컬 스토리지에서 플레이리스트 가져옴
-        playlistLinks.push(
-            <li key={i}>
-                <Link to={`/playlist/${playlistKey}`}><span className='icon2'><FcApproval /></span>{playlist.name}</Link>
-            </li>
-        );
+        if (playlist) { // null 체크
+            playlistLinks.push(
+                <li key={i} className="playlist-item">
+                    <Link to={`/playlist/${playlistKey}`}><span className='icon2'><FcApproval /></span>{playlist.name}</Link>
+                    <button className="delete-button" onClick={() => handleDeletePlaylist(playlistKey)}><IoTrash /></button> {/* 플레이리스트 삭제 버튼 */}
+                </li>
+            );
+        }
     }
 
     return (
         <header id='header' role='banner'>
             <h1 className='logo'>
-                <Link to='/'><IoMusicalNotes />나의 뮤직 챠트</Link> {/* 메인 페이지로 링크 */}
+                <Link to='/'><IoMusicalNotes />Soundgallery</Link> {/* 메인 페이지로 링크 */}
             </h1>
             <h2>chart</h2>
             <ul>
-                <li><Link to='chart/melon'><span className='icon'></span>멜론 챠트</Link></li>
-                <li><Link to='chart/bugs'><span className='icon'></span>벅스 챠트</Link></li>
-                <li><Link to='chart/apple'><span class='icon'></span>애플 챠트</Link></li>
-                <li><Link to='chart/genie'><span className='icon'></span>지니 챠트</Link></li>
-                <li><Link to='chart/billboard'><span className='icon'></span>빌보드 챠트</Link></li>
+                <li><Link to='chart/melon'><span className='icon'></span>Melon Chart</Link></li>
+                <li><Link to='chart/bugs'><span className='icon'></span>bugs Chart</Link></li>
+                <li><Link to='chart/apple'><span className='icon'></span>Apple Chart</Link></li>
+                <li><Link to='chart/genie'><span className='icon'></span>Genie Chart</Link></li>
+                <li><Link to='chart/billboard'><span className='icon'></span>Billboard Chart</Link></li>
             </ul>
             <h2>playlist</h2>
             <ul>
@@ -81,7 +91,6 @@ const Header = () => {
                                 onChange={handleInputChange}
                             />
                             <button onClick={handleAddItem}>ADD</button>
-                            
                         </div>
                     ) : (
                         <Link to='#' onClick={handleAddClick}><span className='icon2'><FcPlus /></span>Create</Link> 

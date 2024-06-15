@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { MusicPlayerContext } from '../context/MusicPlayerProvider';
-import { IoMusicalNotes, IoPlaySkipForward, IoPlaySkipBack, IoPlay, IoPause, IoRepeat, IoShuffleOutline } from 'react-icons/io5';
+import { IoMusicalNotes, IoPlaySkipForward, IoPlaySkipBack, IoPlay, IoPause, IoRepeat, IoShuffleOutline, IoTrash } from 'react-icons/io5';
 import ReactPlayer from 'react-player';
 
 const Aside = () => {
@@ -20,8 +20,11 @@ const Aside = () => {
         isShuffling,
         toggleRepeat,
         isRepeating,
-        handleTrackEnd
+        handleTrackEnd,
+        removeTrack // 삭제 기능 추가
     } = useContext(MusicPlayerContext);
+
+    const [volume, setVolume] = useState(0.8);
 
     const currentTrackRef = useRef(null);
     const playerRef = useRef(null);
@@ -56,6 +59,10 @@ const Aside = () => {
         }
     };
 
+    const handleVolumeChange = (event) => {
+        setVolume(parseFloat(event.target.value));
+    };
+
     const formatTime = (seconds) => {
         const minutes = Math.floor(seconds / 60);
         const secs = Math.floor(seconds % 60);
@@ -87,6 +94,7 @@ const Aside = () => {
                                 width="100%"
                                 height="100%"
                                 playing={isPlaying}
+                                volume={volume}
                                 onEnded={handleTrackEndModified}
                                 onProgress={handleProgress}
                                 onDuration={handleDuration}
@@ -134,6 +142,16 @@ const Aside = () => {
                             <IoRepeat />
                         </span>
                     </div>
+                    <div className="volume">
+                        <input
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.01"
+                            value={volume}
+                            onChange={handleVolumeChange}
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -144,11 +162,11 @@ const Aside = () => {
                         <li
                             key={index}
                             ref={index === currentTrackIndex ? currentTrackRef : null}
-                            onClick={() => playTrack(index)}
                             className={index === currentTrackIndex ? 'current-track' : ''}
                         >
                             <span className="img" style={{ backgroundImage: `url(${track.imageURL})` }}></span>
-                            <span className="title">{track.title}</span>
+                            <span className="title" onClick={() => playTrack(index)}>{track.title}</span>
+                            <button className="delete" onClick={() => removeTrack(index)}><IoTrash /></button>
                         </li>
                     ))}
                 </ul>

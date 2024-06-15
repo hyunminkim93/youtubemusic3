@@ -1,5 +1,9 @@
 .music-chart {
-    padding: 0 2rem 2rem 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
     position: relative;
 
     >.title {
@@ -24,7 +28,7 @@
                 }
 
                 span {
-                    font-family: var(--fontJ);
+                    font-family: var(--fontA);
                     font-weight: 300;
                 }
             }
@@ -70,6 +74,10 @@
 
                 .title {
                     flex: 1;
+                    font-family: var(--fontB);
+                    font-weight: 900;
+                    
+                    
                 }
 
                 .album {
@@ -79,7 +87,7 @@
                 }
 
                 &:hover {
-                    background-color: var(--white);
+                    background-color: var(--white300);
 
                     .album {
                         color: var(--black100);
@@ -96,12 +104,13 @@
     right: 400px;
     bottom: 0;
     height: 370px;
-    background-color: var(--pointBg);
+    background-color: #f9f9f9;
     padding: 2rem;
 
     h3 {
         font-size: 1.5rem;
         margin-bottom: 1rem;
+        font-family: var(--fontB);
     }
 
     li {
@@ -127,6 +136,9 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-family: var(--fontE);
+            font-weight: 900;
+            font-size: 18px;
         }
 
         .playNow {
@@ -149,9 +161,8 @@
         }
 
         &:hover {
-            background-color: var(--pointColor);
+            background-color: var(--white300);
             border-radius: 50px;
-            color: var(--white);
         }
     }
 
@@ -167,6 +178,7 @@
 
         svg {
             font-size: 20px;
+            margin-bottom: 18px;
         }
     }
 
