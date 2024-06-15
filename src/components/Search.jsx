@@ -4,8 +4,7 @@ import { LuSearch } from 'react-icons/lu';
 import { MdOutlinePlayCircleFilled, MdPlaylistAdd } from 'react-icons/md';
 import { MusicPlayerContext } from '../context/MusicPlayerProvider';
 import Modal from './Modal';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Notification from '../Notification'; // Notification 컴포넌트 임포트
 
 const jsonFiles = [
     '/data/byunghyun.json',
@@ -27,6 +26,7 @@ const Search = () => {
     const [isFocused, setIsFocused] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTrack, setSelectedTrack] = useState(null);
+    const [notification, setNotification] = useState(null); // 알림 상태 추가
     const inputRef = useRef(null);
     const resultsRef = useRef(null);
     const { addTrackToList, playTrack, musicData } = useContext(MusicPlayerContext);
@@ -93,7 +93,7 @@ const Search = () => {
         if (playlist && selectedTrack) {
             playlist.items.push(selectedTrack);
             localStorage.setItem(playlistId, JSON.stringify(playlist));
-            toast.success('리스트에 추가되었습니다.');
+            setNotification('리스트에 추가되었습니다.'); // 알림 설정
         }
     };
 
@@ -130,7 +130,12 @@ const Search = () => {
                     </ul>
                 )}
             </article>
-            <ToastContainer />
+            {notification && (
+                <Notification 
+                    message={notification}
+                    onClose={() => setNotification(null)}
+                />
+            )}
             <Modal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

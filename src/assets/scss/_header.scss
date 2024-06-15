@@ -114,6 +114,47 @@
         font-size: 20px;
     }
 
+    /* CSS 스타일 추가 */
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 버튼 간의 간격 조정 */
+}
+
+.input-box {
+    flex-grow: 1; /* 입력 박스가 가능한 공간을 차지하도록 */
+    border: 1px solid var(--black);
+}
+
+.notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4caf50;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    animation: fadeInOut 3s forwards;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
     
 }
 

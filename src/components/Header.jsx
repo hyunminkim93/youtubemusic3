@@ -52,6 +52,11 @@ const Header = () => {
         }
     };
 
+    const handleCancel = () => {
+        setNewItem(''); // 입력 값 초기화
+        setShowInput(false); // 입력 박스 숨기기
+    };
+
     const handleDeletePlaylist = (key) => {
         localStorage.removeItem(key); // 로컬 스토리지에서 해당 플레이리스트 삭제
         const updatedPlaylists = playlists.filter(playlist => playlist.id !== key);
@@ -80,7 +85,7 @@ const Header = () => {
             <h1 className='logo'>
                 <Link to='/'><IoMusicalNotes />Soundgallery</Link> {/* 메인 페이지로 링크 */}
             </h1>
-            <h2>차트</h2>
+            <h2>음악차트</h2>
             <ul>
                 <li><Link to='chart/melon'><span className='icon'></span>Melon Chart</Link></li>
                 <li><Link to='chart/bugs'><span className='icon'></span>Bugs Chart</Link></li>
@@ -99,13 +104,15 @@ const Header = () => {
                 ))}
                 <li>
                     {showInput ? (
-                        <div>
+                        <div className='input-container'>
                             <input
                                 type='text'
                                 value={newItem}
                                 onChange={handleInputChange}
+                                className='input-box'
                             />
-                            <button onClick={handleAddItem}>ADD</button>
+                            <button onClick={handleAddItem} className='add-button'>추가</button>
+                            <button onClick={handleCancel} className='cancel-button'>취소</button>
                         </div>
                     ) : (
                         <Link to='#' onClick={handleAddClick}><span className='icon2'><FcPlus /></span>Create</Link>
