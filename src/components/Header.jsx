@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { FcRating, FcPlus, FcApproval } from "react-icons/fc";
 import { IoMusicalNotes, IoTrash } from "react-icons/io5"; // import IoTrash correctly
@@ -7,12 +7,20 @@ import { IoMusicalNotes, IoTrash } from "react-icons/io5"; // import IoTrash cor
 const Header = () => {
     const [showInput, setShowInput] = useState(false); // 입력 박스 표시 여부 상태
     const [newItem, setNewItem] = useState(''); // 새 항목의 제목 상태
-    const [playlistCount, setPlaylistCount] = useState(0); // 플레이리스트 개수 상태
+    const [playlists, setPlaylists] = useState([]); // 플레이리스트 배열 상태
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // 컴포넌트가 마운트될 때 로컬 스토리지에서 플레이리스트 개수를 가져와 상태 업데이트
-        const count = localStorage.getItem('playlistCount') || 0; 
-        setPlaylistCount(Number(count)); // 상태 업데이트
+        const playlistCount = Number(localStorage.getItem('playlistCount') || 0);
+        const loadedPlaylists = [];
+        for (let i = 1; i <= playlistCount; i++) {
+            const playlistKey = `playlist${i}`;
+            const playlist = JSON.parse(localStorage.getItem(playlistKey));
+            if (playlist) {
+                loadedPlaylists.push(playlist);
+            }
+        }
+        setPlaylists(loadedPlaylists);
     }, []);
 
     const handleAddClick = () => {
@@ -25,7 +33,7 @@ const Header = () => {
 
     const handleAddItem = () => {
         if (newItem.trim() !== '') { // 입력 값이 비어있지 않은 경우
-            const newCount = playlistCount + 1; // 새로운 플레이리스트 번호
+            const newCount = playlists.length + 1; // 새로운 플레이리스트 번호
             const playlistKey = `playlist${newCount}`; // 플레이리스트 키 (예: playlist1, playlist2)
             const newPlaylist = {
                 id: playlistKey,
@@ -34,11 +42,11 @@ const Header = () => {
             };
 
             // 로컬 스토리지에 새로운 플레이리스트와 개수를 저장
-            localStorage.setItem(playlistKey, JSON.stringify(newPlaylist)); 
-            localStorage.setItem('playlistCount', newCount.toString()); 
-            
+            localStorage.setItem(playlistKey, JSON.stringify(newPlaylist));
+            localStorage.setItem('playlistCount', newCount.toString());
+
             // 상태 업데이트
-            setPlaylistCount(newCount); 
+            setPlaylists([...playlists, newPlaylist]); // 새로운 플레이리스트를 배열에 추가
             setNewItem(''); // 입력 값 초기화
             setShowInput(false); // 입력 박스 숨기기
         }
@@ -46,42 +54,49 @@ const Header = () => {
 
     const handleDeletePlaylist = (key) => {
         localStorage.removeItem(key); // 로컬 스토리지에서 해당 플레이리스트 삭제
-        const updatedCount = playlistCount - 1;
-        localStorage.setItem('playlistCount', updatedCount.toString());
-        setPlaylistCount(updatedCount); // 상태 업데이트
-    };
+        const updatedPlaylists = playlists.filter(playlist => playlist.id !== key);
+        setPlaylists(updatedPlaylists);
 
-    const playlistLinks = []; // 플레이리스트 링크를 저장할 배열
-    for (let i = 1; i <= playlistCount; i++) {
-        const playlistKey = `playlist${i}`; // 각 플레이리스트 키 생성
-        const playlist = JSON.parse(localStorage.getItem(playlistKey)); // 로컬 스토리지에서 플레이리스트 가져옴
-        if (playlist) { // null 체크
-            playlistLinks.push(
-                <li key={i} className="playlist-item">
-                    <Link to={`/playlist/${playlistKey}`}><span className='icon2'><FcApproval /></span>{playlist.name}</Link>
-                    <button className="delete-button" onClick={() => handleDeletePlaylist(playlistKey)}><IoTrash /></button> {/* 플레이리스트 삭제 버튼 */}
-                </li>
-            );
+        const updatedCount = updatedPlaylists.length;
+        localStorage.setItem('playlistCount', updatedCount.toString());
+
+        // 플레이리스트 재정렬
+        updatedPlaylists.forEach((playlist, index) => {
+            const newKey = `playlist${index + 1}`;
+            localStorage.setItem(newKey, JSON.stringify({ ...playlist, id: newKey }));
+        });
+
+        // 불필요한 키 제거
+        for (let i = updatedCount + 1; i <= playlists.length; i++) {
+            localStorage.removeItem(`playlist${i}`);
         }
-    }
+
+        // 현재 페이지가 삭제된 플레이리스트 페이지인 경우 홈으로 리디렉션
+        navigate('/');
+    };
 
     return (
         <header id='header' role='banner'>
             <h1 className='logo'>
                 <Link to='/'><IoMusicalNotes />Soundgallery</Link> {/* 메인 페이지로 링크 */}
             </h1>
-            <h2>chart</h2>
+            <h2>차트</h2>
             <ul>
                 <li><Link to='chart/melon'><span className='icon'></span>Melon Chart</Link></li>
-                <li><Link to='chart/bugs'><span className='icon'></span>bugs Chart</Link></li>
+                <li><Link to='chart/bugs'><span className='icon'></span>Bugs Chart</Link></li>
                 <li><Link to='chart/apple'><span className='icon'></span>Apple Chart</Link></li>
                 <li><Link to='chart/genie'><span className='icon'></span>Genie Chart</Link></li>
                 <li><Link to='chart/billboard'><span className='icon'></span>Billboard Chart</Link></li>
             </ul>
-            <h2>playlist</h2>
+            <h2>플레이리스트</h2>
             <ul>
-                <li><Link to='/mymusic'><span className='icon2'><FcRating /></span>Mymusic</Link></li>
-                {playlistLinks} {/* 동적으로 생성된 플레이리스트 링크 */}
+                <li><Link to='/mymusic'><span className='icon2'><FcRating /></span>My Music</Link></li>
+                {playlists.map((playlist, index) => (
+                    <li key={index} className="playlist-item">
+                        <Link to={`/playlist/${playlist.id}`}><span className='icon2'><FcApproval /></span>{playlist.name}</Link>
+                        <button className="delete-button" onClick={() => handleDeletePlaylist(playlist.id)}><IoTrash /></button> {/* 플레이리스트 삭제 버튼 */}
+                    </li>
+                ))}
                 <li>
                     {showInput ? (
                         <div>
@@ -93,7 +108,7 @@ const Header = () => {
                             <button onClick={handleAddItem}>ADD</button>
                         </div>
                     ) : (
-                        <Link to='#' onClick={handleAddClick}><span className='icon2'><FcPlus /></span>Create</Link> 
+                        <Link to='#' onClick={handleAddClick}><span className='icon2'><FcPlus /></span>Create</Link>
                         // 'Create' 버튼 클릭 시 입력 박스 표시
                     )}
                 </li>
