@@ -2,12 +2,12 @@ import React, { forwardRef, useContext, useState } from 'react'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import {  ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from './Modal';
 
 import { FcCalendar } from 'react-icons/fc';
-import {  MdOutlinePlayCircleFilled, MdClose, MdHive } from 'react-icons/md';
+import { MdOutlinePlayCircleFilled, MdClose, MdHive } from 'react-icons/md';
 import { MusicPlayerContext } from '../context/MusicPlayerProvider';
 
 const CustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -24,6 +24,7 @@ const Chart = ({ title, showCalendar, selectedDate, onDateChange, minDate, maxDa
     const [selectedTitle, setSelectedTitle] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTrack, setSelectedTrack] = useState(null);
+    const [chartData, setChartData] = useState(data);
 
     const searchYoutube = async (query) => {
         try {
@@ -59,7 +60,6 @@ const Chart = ({ title, showCalendar, selectedDate, onDateChange, minDate, maxDa
         playTrack(0);
     };
 
-
     const handleAddToPlaylistClick = (result) => {
         setSelectedTrack({
             title: result.snippet.title,
@@ -77,6 +77,14 @@ const Chart = ({ title, showCalendar, selectedDate, onDateChange, minDate, maxDa
             playlist.items.push(selectedTrack);
             localStorage.setItem(playlistId, JSON.stringify(playlist));
         }
+    };
+
+    const handleRemoveChartItem = (index) => {
+        setChartData(prevData => prevData.filter((_, i) => i !== index));
+    };
+
+    const handleRemoveResult = (index) => {
+        setYoutubeResults(prevResults => prevResults.filter((_, i) => i !== index));
     };
 
     return (
@@ -99,11 +107,14 @@ const Chart = ({ title, showCalendar, selectedDate, onDateChange, minDate, maxDa
                 </div>
                 <div className="list">
                     <ul>
-                        {data.map((item, index) => (
-                            <li key={index} onClick={() => handleItemClick(item.title)}>
-                                <span className='rank'>#{item.rank}</span>
+                        {chartData.sort((a, b) => a.rank - b.rank).map((item, index) => (
+                            <li key={index}>
+                                <span className='rank'>#{index + 1}</span>
                                 <span className='img' style={{ backgroundImage: `url(${item.imageURL})` }}></span>
-                                <span className='title'>{item.title}</span>
+                                <span className='title' onClick={() => handleItemClick(item.title)}>{item.title}</span>
+                                <span className='remove' onClick={() => handleRemoveChartItem(index)}>
+                                    <MdClose /><span className='ir'>삭제하기</span>
+                                </span>
                             </li>
                         ))}
                     </ul>
@@ -122,6 +133,9 @@ const Chart = ({ title, showCalendar, selectedDate, onDateChange, minDate, maxDa
                                 </span>
                                 <span className='chartAdd' onClick={() => handleAddToPlaylistClick(result)}>
                                     <MdHive /><span className='ir'>나의 리스트에 추가하기</span>
+                                </span>
+                                <span className='remove' onClick={() => handleRemoveResult(index)}>
+                                    <MdClose /><span className='ir'>삭제하기</span>
                                 </span>
                             </li>
                         ))}
