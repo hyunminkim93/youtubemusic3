@@ -11,8 +11,12 @@ const Modal = ({ isOpen, onClose, onAddToPlaylist }) => {
                 const playlistKey = `playlist${i}`;
                 const playlist = JSON.parse(localStorage.getItem(playlistKey));
                 if (playlist) {
-                    loadedPlaylists.push(playlist);
+                    loadedPlaylists.push({ ...playlist, id: playlistKey });
                 }
+            }
+            const myMusicPlaylist = JSON.parse(localStorage.getItem('musicList'));
+            if (myMusicPlaylist) {
+                loadedPlaylists.push({ ...myMusicPlaylist, id: 'musicList', name: 'My Music' });
             }
             setPlaylists(loadedPlaylists);
         }

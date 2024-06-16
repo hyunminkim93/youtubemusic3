@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { LuSearch } from 'react-icons/lu';
-import { MdOutlinePlayCircleFilled, MdPlaylistAdd } from 'react-icons/md';
-import { MusicPlayerContext } from '../context/MusicPlayerProvider';
+import { MdPlaylistAdd } from 'react-icons/md';
 import Modal from './Modal';
 import Notification from '../Notification'; // Notification 컴포넌트 임포트
 
@@ -29,7 +28,6 @@ const Search = () => {
     const [notification, setNotification] = useState(null); // 알림 상태 추가
     const inputRef = useRef(null);
     const resultsRef = useRef(null);
-    const { addTrackToList, playTrack, musicData } = useContext(MusicPlayerContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -73,16 +71,6 @@ const Search = () => {
         };
     }, []);
 
-    const handlePlayTrack = (track) => {
-        const trackIndex = musicData.findIndex(item => item.videoID === track.videoID);
-        if (trackIndex === -1) {
-            addTrackToList(track);
-            playTrack(0);
-        } else {
-            playTrack(trackIndex);
-        }
-    };
-
     const handleAddToPlaylistClick = (track) => {
         setSelectedTrack(track);
         setIsModalOpen(true);
@@ -91,9 +79,15 @@ const Search = () => {
     const handleAddToPlaylist = (playlistId) => {
         const playlist = JSON.parse(localStorage.getItem(playlistId));
         if (playlist && selectedTrack) {
+            // Ensure playlist.items exists and is an array
+            if (!Array.isArray(playlist.items)) {
+                playlist.items = [];
+            }
             playlist.items.push(selectedTrack);
             localStorage.setItem(playlistId, JSON.stringify(playlist));
-            setNotification('리스트에 추가되었습니다.'); // 알림 설정
+            setNotification('리스트에 추가되었습니다.');
+        } else {
+            setNotification('플레이리스트를 찾을 수 없습니다.');
         }
     };
 
@@ -122,7 +116,6 @@ const Search = () => {
                                     <p>{item.artist}</p>
                                 </div>
                                 <div className="icons">
-                                    <MdOutlinePlayCircleFilled onClick={() => handlePlayTrack(item)} />
                                     <MdPlaylistAdd onClick={() => handleAddToPlaylistClick(item)} />
                                 </div>
                             </li>
