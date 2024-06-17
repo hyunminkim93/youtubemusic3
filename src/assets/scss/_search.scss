@@ -3,80 +3,122 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
+    background-color: #e0f7fa;
+    padding: 2rem 0;
 }
 
 .search {
     position: relative;
     padding: 2rem;
     width: 100%;
-
-    label {
-        position: absolute;
-        left: 53px;
-        top: 45px;
-    }
-
-    input {
-        width: 100%;
-        font-size: 16px;
-        padding: 1rem;
-        border-radius: 50px;
-        padding-left: 50px;
-        font-family: var(--fontE);
-        font-weight: 900;
-    }
-
-    .search-results {
-        position: absolute;
-        top: 108px; /* 검색창 아래에 위치하도록 설정 */
-        left: 0;
-        right: 0;
-        background: white;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        z-index: 1000;
-        max-height: 300px; /* 최대 높이 설정 */
-        overflow-y: auto; /* 스크롤 설정 */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out; /* 페이드 인/아웃 효과 */
-    
-        &.fade-in {
-            opacity: 1;
-        }
-    
-        li {
-            list-style: none;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            display: flex; /* Flexbox 사용 */
-            align-items: center;
-    
-            &:last-child {
-                border-bottom: none;
-            }
-    
-            .result-image {
-                width: 40px; /* 이미지 너비 설정 */
-                height: 40px; /* 이미지 높이 설정 */
-                margin-right: 10px; /* 이미지와 텍스트 사이의 간격 설정 */
-                border-radius: 50%; /* 이미지 원형으로 설정 */
-                object-fit: cover; /* 이미지가 잘리지 않도록 설정 */
-            }
-    
-            h2 {
-                margin: 0;
-                font-size: 1rem; /* 제목 글씨 크기 조절 */
-                font-weight: 600;
-            }
-    
-            p {
-                margin: 0;
-                font-size: 0.875rem; /* 아티스트 글씨 크기 조절 */
-                color: #666; /* 글씨 색상 조절 */
-            }
-        }
-    }
-    
+    max-width: 800px;
 }
 
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #004d40;
+    font-size: 24px;
+}
+
+input[type="text"] {
+    width: 100%;
+    font-size: 16px;
+    padding: 1rem;
+    padding-left: 50px; /* 아이콘 위치를 위해 패딩 추가 */
+    border-radius: 50px;
+    font-family: 'Verdana', sans-serif;
+    font-weight: 900;
+    border: 2px solid #004d40;
+    background-color: #b2ebf2;
+    color: #004d40;
+    outline: none;
+    transition: background-color 0.3s, border-color 0.3s;
+
+    &:focus {
+        border-color: #00796b;
+        background-color: #80deea;
+    }
+}
+
+.search-results {
+    position: absolute;
+    top: 108px; /* 검색창 아래에 위치하도록 설정 */
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #b2ebf2;
+    border-radius: 4px;
+    z-index: 1000;
+    max-height: 300px; /* 최대 높이 설정 */
+    overflow-y: auto; /* 스크롤 설정 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out; /* 페이드 인/아웃 효과 */
+
+    &.fade-in {
+        opacity: 1;
+    }
+
+    li {
+        list-style: none;
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        display: flex; /* Flexbox 사용 */
+        align-items: center;
+        background-color: #e0f7fa; /* 배경색 변경 */
+        transition: background-color 0.3s;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:hover {
+            background-color: #b2ebf2; /* 호버 시 배경색 */
+        }
+
+        .result-image {
+            width: 40px; /* 이미지 너비 설정 */
+            height: 40px; /* 이미지 높이 설정 */
+            margin-right: 10px; /* 이미지와 텍스트 사이의 간격 설정 */
+            border-radius: 50%; /* 이미지 원형으로 설정 */
+            object-fit: cover; /* 이미지가 잘리지 않도록 설정 */
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 1rem; /* 제목 글씨 크기 조절 */
+            font-weight: 600;
+            color: #004d40;
+        }
+
+        p {
+            margin: 0;
+            font-size: 0.875rem; /* 아티스트 글씨 크기 조절 */
+            color: #666; /* 글씨 색상 조절 */
+        }
+
+        .icons {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+
+            svg {
+                cursor: pointer;
+                color: #004d40;
+                font-size: 24px;
+
+                &:hover {
+                    color: #00796b;
+                }
+            }
+        }
+    }
+}
