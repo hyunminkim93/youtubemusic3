@@ -1,6 +1,6 @@
 # Youtube API를 이용한 음악 사이트
 
-<img width="1705" alt="스크린샷 2024-06-17 오후 5 17 08" src="https://github.com/hyunminkim93/youtubemusic3/assets/163366255/772d8d38-8d1f-4727-9f88-ee4f4811a5fb">
+<img width="1710" alt="스크린샷 2024-06-17 오후 6 38 44" src="https://github.com/hyunminkim93/youtubemusic3/assets/163366255/23eb3ba3-ff00-4c7b-8635-bec544ef14fc">
 
 # 설치
 
