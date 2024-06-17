@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Chart from '../components/Chart';
 import { MusicPlayerContext } from '../context/MusicPlayerProvider';
 
+
 const Playlist = () => {
     const { id } = useParams();
     const [playlist, setPlaylist] = useState({ name: '', items: [] });
@@ -35,7 +36,7 @@ const Playlist = () => {
         <section id="playlist">
             {playlist.items.length > 0 ? (
                 <Chart
-                    title={`${playlist.name} 리스트`}
+                    title={`🎵  ${playlist.name} 리스트`}
                     data={playlist.items}
                     showCalendar={false}
                     onDelete={handleDelete}
@@ -44,7 +45,7 @@ const Playlist = () => {
             ) : (
                 <section className='music-chart'>
                     <div className="title">
-                        <h2>😜 {`${playlist.name}`}</h2>
+                        <h2>{`🎵  ${playlist.name}`}</h2>
                     </div>
                     <div className="list">
                         <ul>

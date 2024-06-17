@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import { LuSearch } from 'react-icons/lu';
 import { MdPlaylistAdd } from 'react-icons/md';
 import Modal from './Modal';
 import Notification from '../Notification'; // Notification 컴포넌트 임포트
+import { MusicPlayerContext } from '../context/MusicPlayerProvider';
 
 const jsonFiles = [
     '/data/byunghyun.json',
@@ -28,6 +29,7 @@ const Search = () => {
     const [notification, setNotification] = useState(null); // 알림 상태 추가
     const inputRef = useRef(null);
     const resultsRef = useRef(null);
+    const { addToMusicList } = useContext(MusicPlayerContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -77,18 +79,24 @@ const Search = () => {
     };
 
     const handleAddToPlaylist = (playlistId) => {
-        const playlist = JSON.parse(localStorage.getItem(playlistId));
-        if (playlist && selectedTrack) {
-            // Ensure playlist.items exists and is an array
-            if (!Array.isArray(playlist.items)) {
-                playlist.items = [];
-            }
-            playlist.items.push(selectedTrack);
-            localStorage.setItem(playlistId, JSON.stringify(playlist));
-            setNotification('리스트에 추가되었습니다.');
+        if (playlistId === 'musicList') {
+            addToMusicList(selectedTrack);
+            setNotification('나만의 음악 리스트에 추가되었습니다.');
         } else {
-            setNotification('플레이리스트를 찾을 수 없습니다.');
+            const playlist = JSON.parse(localStorage.getItem(playlistId));
+            if (playlist && selectedTrack) {
+                // Ensure playlist.items exists and is an array
+                if (!Array.isArray(playlist.items)) {
+                    playlist.items = [];
+                }
+                playlist.items.push(selectedTrack);
+                localStorage.setItem(playlistId, JSON.stringify(playlist));
+                setNotification('리스트에 추가되었습니다.');
+            } else {
+                setNotification('플레이리스트를 찾을 수 없습니다.');
+            }
         }
+        setIsModalOpen(false);
     };
 
     return (

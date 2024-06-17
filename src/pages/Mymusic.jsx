@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import useFetchData from '../hook/useFetchData';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
@@ -7,23 +7,10 @@ import { MusicPlayerContext } from '../context/MusicPlayerProvider';
 
 const Mymusic = () => {
     const { data, loading, error } = useFetchData('./data/hyunmin.json');
-    const [musicList, setMusicList] = useState([]);
-    const { addTrackToList, playTrack, musicData } = useContext(MusicPlayerContext);
-
-    useEffect(() => {
-        const storedMusicList = JSON.parse(localStorage.getItem('musicList'));
-        if (storedMusicList) {
-            setMusicList(storedMusicList);
-        } else if (data) {
-            setMusicList(data);
-        }
-    }, [data]);
+    const { musicList, removeFromMusicList, playTrack, addTrackToList, musicData } = useContext(MusicPlayerContext);
 
     const handleDelete = (index) => {
-        const updatedList = [...musicList];
-        updatedList.splice(index, 1);
-        setMusicList(updatedList);
-        localStorage.setItem('musicList', JSON.stringify(updatedList));
+        removeFromMusicList(index);
     };
 
     const handlePlayTrack = (track) => {

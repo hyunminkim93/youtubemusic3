@@ -12,6 +12,7 @@ const MusicPlayerProvider = ({ children }) => {
     const [isShuffling, setIsShuffling] = useState(false);
     const [isRepeating, setIsRepeating] = useState(false);
     const [musicData, setMusicData] = useState([]);
+    const [musicList, setMusicList] = useState([]);
 
     useEffect(() => {
         const savedMusicData = localStorage.getItem('musicData');
@@ -19,6 +20,11 @@ const MusicPlayerProvider = ({ children }) => {
             setMusicData(JSON.parse(savedMusicData));
         } else {
             fetchMusicData();
+        }
+        
+        const savedMusicList = localStorage.getItem('musicList');
+        if (savedMusicList) {
+            setMusicList(JSON.parse(savedMusicList));
         }
     }, []);
 
@@ -114,10 +120,23 @@ const MusicPlayerProvider = ({ children }) => {
         }
     };
 
+    const addToMusicList = (track) => {
+        const updatedMusicList = [...musicList, track];
+        setMusicList(updatedMusicList);
+        localStorage.setItem('musicList', JSON.stringify(updatedMusicList));
+    };
+
+    const removeFromMusicList = (index) => {
+        const updatedMusicList = musicList.filter((_, i) => i !== index);
+        setMusicList(updatedMusicList);
+        localStorage.setItem('musicList', JSON.stringify(updatedMusicList));
+    };
+
     return (
         <MusicPlayerContext.Provider
             value={{
                 musicData,
+                musicList,
                 currentTrack,
                 currentTrackIndex,
                 isPlaying,
@@ -137,6 +156,8 @@ const MusicPlayerProvider = ({ children }) => {
                 addTrackToList,
                 addTrackToEnd,
                 removeTrack,
+                addToMusicList,
+                removeFromMusicList,
             }}
         >
             {children}

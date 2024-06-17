@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import musicThemeImage from '../assets/img/music.webp';
 
 const Home = () => {
   return (
-    <div>Home</div>
-  )
+    <div>
+      <img src={musicThemeImage} alt="Music Theme" />
+    </div>
+  );
 }
 
-export default Home
+export default Home;
