@@ -1,4 +1,4 @@
-import React, { forwardRef, useContext } from 'react';
+import React, { forwardRef } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ToastContainer } from 'react-toastify';
@@ -6,7 +6,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { FcCalendar } from 'react-icons/fc';
 import { MdOutlinePlayCircleFilled, MdDelete, MdPlaylistAdd } from 'react-icons/md';
-import { MusicPlayerContext } from '../context/MusicPlayerProvider';
 
 const CustomInput = forwardRef(({ value, onClick }, ref) => (
     <button onClick={onClick} ref={ref}>
@@ -16,8 +15,6 @@ const CustomInput = forwardRef(({ value, onClick }, ref) => (
 ));
 
 const Chart = ({ title, showCalendar, selectedDate, onDateChange, minDate, maxDate, data, onDelete, onPlay, onAddToPlaylistClick }) => {
-    const { addTrackToList, playTrack } = useContext(MusicPlayerContext);
-
     return (
         <>
             <section className='music-chart'>

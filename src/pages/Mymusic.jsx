@@ -6,7 +6,7 @@ import Chart from '../components/Chart';
 import { MusicPlayerContext } from '../context/MusicPlayerProvider';
 
 const Mymusic = () => {
-    const { data, loading, error } = useFetchData('./data/hyunmin.json');
+    const { loading, error } = useFetchData('./data/hyunmin.json'); // data 변수를 사용하지 않으므로 제거했습니다.
     const { musicList, removeFromMusicList, playTrack, addTrackToList, musicData } = useContext(MusicPlayerContext);
 
     const handleDelete = (index) => {
