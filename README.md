@@ -230,9 +230,9 @@ npm i axios
   - Search.jsx
 
 - context/
-  -MusicPlayerProvider.jsx
+  - MusicPlayerProvider.jsx
 - hook/
-  useFetchData.jsx
+  - useFetchData.jsx
 - pages/
 
   - ChartList.jsx
