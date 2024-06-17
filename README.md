@@ -14,30 +14,227 @@ npm i react-spinners   // 로딩소스
 npm install react-datepicker   // 달력
 ```
 
-# 나만의 뮤직 사이트 기획의도
+### 나만의 음악 사이트 기획안
 
-## 개요
-나만의 뮤직 사이트는 사용자가 음악을 보다 쉽고 편리하게 탐색하고 감상할 수 있도록 도와주는 플랫폼입니다. 이 사이트는 다양한 음악 차트와 플레이리스트 기능을 통해 사용자에게 맞춤형 음악 경험을 제공합니다.
+---
 
-## 주요 기능
+#### 프로젝트 개요
 
-### 음악 차트
-- **Melon Chart**: 국내 인기 음악 차트를 제공하여 최신 히트곡을 쉽게 확인할 수 있습니다.
-- **Bugs Chart**: Bugs의 실시간 차트를 통해 트렌디한 음악을 빠르게 접할 수 있습니다.
-- **Apple Chart**: Apple Music의 인기 차트를 제공하여 다양한 글로벌 음악을 탐색할 수 있습니다.
-- **Genie Chart**: Genie Music의 차트를 통해 국내외 다양한 음악을 감상할 수 있습니다.
-- **Billboard Chart**: Billboard의 최신 차트를 통해 글로벌 음악 트렌드를 파악할 수 있습니다.
+이 프로젝트는 React와 YouTube API를 이용하여 개인 맞춤형 음악 사이트를 만드는 것을 목표로 합니다. 사용자는 음악을 검색하고, 플레이리스트에 노래를 추가하며, 이를 관리할 수 있습니다.
 
-### 플레이리스트
-- **My Music**: 사용자가 직접 자신의 플레이리스트를 생성하고 관리할 수 있습니다.
-- **Create**: 새로운 플레이리스트를 생성하여 나만의 음악 컬렉션을 만들 수 있습니다.
+---
 
-### 음악 재생
-- **Now Playing**: 현재 재생 중인 음악을 표시하고, 사용자가 손쉽게 제어할 수 있는 인터페이스를 제공합니다.
-- **Play list**: 재생목록에 추가된 음악들을 한눈에 볼 수 있으며, 쉽게 삭제하거나 순서를 변경할 수 있습니다.
+#### 주요 기능
 
-## 디자인 컨셉
-사이트 디자인은 사용자가 직관적으로 사용할 수 있도록 깔끔하고 현대적인 레이아웃을 채택했습니다. 다양한 악기와 음악 관련 아이콘을 활용하여 음악 사이트의 특성을 잘 살렸습니다. 색상은 주로 음악의 다양한 감정을 표현할 수 있는 다채로운 색상을 사용하여 시각적인 즐거움을 제공합니다.
+1. **검색 기능**
 
-## 결론
-나만의 뮤직 사이트는 사용자 중심의 인터페이스와 다양한 음악 차트, 맞춤형 플레이리스트 기능을 통해 음악 감상의 즐거움을 극대화합니다. 앞으로도 지속적인 업데이트와 개선을 통해 사용자에게 최고의 음악 경험을 제공할 것입니다.
+   - YouTube API를 활용하여 음악 검색 기능 구현
+   - 사용자가 검색어를 입력하면 관련 음악 리스트를 표시
+
+2. **플레이리스트 관리**
+
+   - 사용자가 원하는 음악을 플레이리스트에 추가
+   - 플레이리스트에서 음악을 삭제하는 기능 추가
+
+3. **차트 기능**
+
+   - 여러 음악 차트를 기반으로 인기 음악을 확인할 수 있는 기능
+
+4. **마이 뮤직**
+   - 사용자가 즐겨 듣는 음악을 모아놓은 개인 플레이리스트
+
+---
+
+#### 개발 과정에서의 어려움
+
+1. **검색 기능 구현 문제**
+
+   - `axios`를 사용하여 여러 JSON 파일에서 데이터를 가져오는 로직 구현이 까다로웠음.
+   - 아래 코드는 여러 JSON 파일에서 데이터를 가져와 하나의 배열로 합치는 방식으로 구현되어 있음:
+     ```jsx
+     useEffect(() => {
+       const fetchData = async () => {
+         let allData = [];
+         for (const file of jsonFiles) {
+           try {
+             const response = await axios.get(file);
+             allData = allData.concat(response.data);
+           } catch (error) {
+             console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
+           }
+         }
+         setData(allData);
+       };
+       fetchData();
+     }, []);
+     ```
+   - 검색어 입력 시, 해당 검색어가 포함된 제목이나 아티스트를 가진 데이터를 필터링하여 표시하는 로직에서 문제가 발생함.
+   - 예를 들어, 사용자가 검색어를 입력하면 `searchTerm` 상태가 업데이트되고, 이 상태를 기반으로 데이터를 필터링하여 `filteredData`에 저장함:
+     ```jsx
+     useEffect(() => {
+       setFilteredData(
+         data.filter(
+           (item) =>
+             item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+             item.artist.toLowerCase().includes(searchTerm.toLowerCase())
+         )
+       );
+     }, [searchTerm, data]);
+     ```
+   - 클릭 이벤트 핸들링 및 검색 결과 외부 클릭 시 검색 결과가 닫히도록 하는 기능 구현에 어려움을 겪음. 이를 위해 `useRef`와 `useEffect`를 활용하여 외부 클릭을 감지하는 로직을 구현함
+
+     ```jsx
+     useEffect(() => {
+       const handleClickOutside = (event) => {
+         if (
+           inputRef.current &&
+           !inputRef.current.contains(event.target) &&
+           resultsRef.current &&
+           !resultsRef.current.contains(event.target)
+         ) {
+           setIsFocused(false);
+         }
+       };
+
+       document.addEventListener("mousedown", handleClickOutside);
+       return () => {
+         document.removeEventListener("mousedown", handleClickOutside);
+       };
+     }, []);
+     ```
+
+2. **음악 플레이어 컨텍스트 관리**
+
+   - 음악 재생 관련 상태와 함수를 관리하는 컨텍스트를 생성하고 제공하는 과정에서 어려움이 있었음.
+   - 로컬 스토리지에서 데이터를 불러오고 저장하는 로직을 구현하는 데 시간이 걸렸음. 예를 들어, `useEffect`를 사용하여 컴포넌트가 마운트될 때 로컬 스토리지에서 데이터를 불러옴
+     ```jsx
+     useEffect(() => {
+       const savedMusicData = localStorage.getItem("musicData");
+       if (savedMusicData) {
+         setMusicData(JSON.parse(savedMusicData));
+       } else {
+         fetchMusicData();
+       }
+
+       const savedMusicList = localStorage.getItem("musicList");
+       if (savedMusicList) {
+         setMusicList(JSON.parse(savedMusicList));
+       }
+     }, []);
+     ```
+   - 트랙 재생, 일시정지, 다음 트랙 재생, 이전 트랙 재생 등의 기능을 구현하는 과정에서 상태 관리의 복잡성으로 인해 어려움을 겪음. 예를 들어, 다음 트랙 재생 기능은 다음과 같이 구현됨
+     ```jsx
+     const nextTrack = () => {
+       if (isShuffling) {
+         const randomIndex = Math.floor(Math.random() * musicData.length);
+         setCurrentTrackIndex(randomIndex);
+         setCurrentTrack(musicData[randomIndex]);
+       } else {
+         const nextIndex = (currentTrackIndex + 1) % musicData.length;
+         setCurrentTrackIndex(nextIndex);
+         setCurrentTrack(musicData[nextIndex]);
+       }
+       setIsPlaying(true);
+       setPlayed(0);
+     };
+     ```
+
+3. **모달 창 구현**
+
+   - 플레이리스트에 노래를 추가할 수 있는 모달 창을 구현하는 과정에서 어려움이 있었음.
+   - 로컬 스토리지에서 플레이리스트를 불러와 모달 창에 표시하고, 선택한 플레이리스트에 노래를 추가하는 로직을 구현하는 데 시간이 걸렸음
+     ```jsx
+     useEffect(() => {
+       if (isOpen) {
+         const count = Number(localStorage.getItem("playlistCount")) || 0;
+         const loadedPlaylists = [];
+         for (let i = 1; i <= count; i++) {
+           const playlistKey = `playlist${i}`;
+           const playlist = JSON.parse(localStorage.getItem(playlistKey));
+           if (playlist) {
+             loadedPlaylists.push({ ...playlist, id: playlistKey });
+           }
+         }
+         const myMusicPlaylist = JSON.parse(localStorage.getItem("musicList"));
+         if (myMusicPlaylist) {
+           loadedPlaylists.push({
+             ...myMusicPlaylist,
+             id: "musicList",
+             name: "My Music",
+           });
+         }
+         setPlaylists(loadedPlaylists);
+       }
+     }, [isOpen]);
+     ```
+
+4. **마이 뮤직 기능**
+   - 사용자가 즐겨 듣는 음악을 모아놓은 개인 플레이리스트 기능을 구현하는 과정에서 어려움이 있었음.
+   - 로컬 스토리지에서 데이터를 불러오고, 음악 리스트를 관리하는 로직을 구현하는 데 시간이 걸렸음. 예를 들어, 개인 플레이리스트를 로컬 스토리지에서 불러와 상태로 저장하는 로직
+     ```jsx
+     useEffect(() => {
+       const storedPlaylist = JSON.parse(localStorage.getItem(id)) || {
+         name: "",
+         items: [],
+       };
+       setPlaylist(storedPlaylist);
+     }, [id]);
+     ```
+   - 삭제 및 재생 기능을 구현하는 과정에서 발생한 상태 관리의 복잡성으로 인해 어려움을 겪음. 예를 들어, 재생 기능은 다음과 같이 구현됨
+     ```jsx
+     const handlePlayTrack = (track) => {
+       const trackIndex = musicData.findIndex(
+         (item) => item.videoID === track.videoID
+       );
+       if (trackIndex === -1) {
+         addTrackToList(track);
+         playTrack(0);
+       } else {
+         playTrack(trackIndex);
+       }
+     };
+     ```
+
+---
+
+#### 파일 구조
+
+- scss/
+
+  - \_aside.scss
+  - \_chart.scss
+  - \_common.scss
+  - \_fonts.scss
+  - \_header.scss
+  - \_modal.scss
+  - \_Notification.scss
+  - \_reset.scss
+  - \_search.scss
+  - \_vars.scss
+  - index.scss
+
+- components/
+
+  - Aside.jsx
+  - Chart.jsx
+  - Error.jsx
+  - Header.jsx
+  - Loading.jsx
+  - Main.jsx
+  - Modal.jsx
+  - Search.jsx
+
+- context/
+  - MusicPlayerProvider.jsx
+- hook/
+  - useFetchData.jsx
+- pages/
+
+  - ChartList.jsx
+  - Home.jsx
+  - Mymusic.jsx
+  - PlayList.jsx
+
+- App.js
+- index.js
+- Notification.js
