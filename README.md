@@ -10,15 +10,16 @@ npm i react-router-dom
 npm i sass
 npm i react-icons
 npm i react-player
-npm i react-spinners 
+npm i react-spinners
 npm i react-datepicker
 npm i react-toastify
 npm i react-modal
 npm i axios
 ```
+
 ---
 
-####  개요
+#### 개요
 
 React와 YouTube API를 이용하여 개인 맞춤형 음악 사이트를 만드는 것을 목표로 합니다. 사용자는 음악을 검색하고, 플레이리스트에 노래를 추가하며, 이를 관리할 수 있습니다.
 
@@ -36,12 +37,19 @@ React와 YouTube API를 이용하여 개인 맞춤형 음악 사이트를 만드
    - 사용자가 원하는 음악을 플레이리스트에 추가
    - 플레이리스트에서 음악을 삭제하는 기능 추가
 
+   ![alt text](/src/assets/img/list.png)
+
 3. **차트 기능**
 
    - 여러 음악 차트를 기반으로 인기 음악을 확인할 수 있는 기능
 
+   ![alt text](/src/assets/img/chart.png)
+
 4. **마이 뮤직**
+
    - 사용자가 즐겨 듣는 음악을 모아놓은 개인 플레이리스트
+
+   ![alt text](/src/assets/img/mymusic.png)
 
 ---
 
