@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import useFetchData from '../hook/useFetchData';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
@@ -6,14 +6,8 @@ import Chart from '../components/Chart';
 import { MusicPlayerContext } from '../context/MusicPlayerProvider';
 
 const Mymusic = () => {
-    const { data: musicData, loading, error } = useFetchData('/data/hyunmin.json');
-    const { musicList, setMusicList, removeFromMusicList, playTrack, addTrackToList } = useContext(MusicPlayerContext);
-
-    useEffect(() => {
-        if (musicData && musicData.length > 0) {
-            setMusicList(musicData);
-        }
-    }, [musicData, setMusicList]);
+    const { loading, error } = useFetchData('/data/hyunmin.json'); // data 변수를 사용하지 않으므로 제거했습니다.
+    const { musicList, removeFromMusicList, playTrack, addTrackToList, musicData } = useContext(MusicPlayerContext);
 
     const handleDelete = (index) => {
         removeFromMusicList(index);
@@ -39,7 +33,7 @@ const Mymusic = () => {
                 data={musicList}
                 showCalendar={false}
                 onDelete={handleDelete}
-                onPlay={handlePlayTrack}
+                onPlay={handlePlayTrack} // onPlay 함수 전달
             />
         </section>
     );

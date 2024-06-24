@@ -137,7 +137,6 @@ const MusicPlayerProvider = ({ children }) => {
             value={{
                 musicData,
                 musicList,
-                setMusicList, // setMusicList 추가
                 currentTrack,
                 currentTrackIndex,
                 isPlaying,
